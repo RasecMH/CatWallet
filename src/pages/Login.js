@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { sendLoginData } from '../redux/actions';
+import { sendLoginData } from '../actions';
 
 class Login extends React.Component {
   state = {
@@ -13,7 +13,7 @@ class Login extends React.Component {
     const { dispatch, history } = this.props;
     const { email } = this.state;
     dispatch(sendLoginData(email));
-    history.push('/wallet');
+    history.push('/carteira');
   }
 
   handleChange = ({ target }) => {
@@ -24,7 +24,6 @@ class Login extends React.Component {
   render() {
     const passwordMinLength = 6;
     const { email, password } = this.state;
-    console.log(!email.includes('@'));
     return (
       <div>
         <form>
@@ -44,7 +43,8 @@ class Login extends React.Component {
           <button
             type="button"
             onClick={ this.handleSubmit }
-            disabled={ !(email.includes('@') && password.length >= passwordMinLength) }
+            disabled={ !(email.match(/\S+@\S+\.\S+/i)
+            && password.length >= passwordMinLength) }
           >
             Entrar
 
