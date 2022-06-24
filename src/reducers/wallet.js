@@ -1,4 +1,4 @@
-import { SEND_WALLET_DATA } from '../actions';
+import { SEND_CURRENCIES_IDS } from '../actions';
 
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 const INITIAL_WALLET_STATE = {
@@ -9,10 +9,10 @@ const INITIAL_WALLET_STATE = {
 };
 
 const wallet = (state = INITIAL_WALLET_STATE, action) => {
-  if (action.type === SEND_WALLET_DATA) {
+  if (action.type === SEND_CURRENCIES_IDS) {
     return ({
       ...state,
-      currencies: action.payload.currencies,
+      currencies: action.payload,
     });
   }
 
