@@ -5,6 +5,7 @@ export const SEND_LOGIN_DATA = 'SEND_LOGIN_DATA';
 export const SEND_WALLET_DATA = 'SEND_WALLET_DATA';
 export const SEND_CURRENCIES_IDS = 'SEND_CURRENCIES_IDS';
 export const SEND_EXPENSE = 'SEND_EXPENSE';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export const sendLoginData = (loginData) => ({
   type: SEND_LOGIN_DATA,
@@ -36,3 +37,8 @@ export const getCurrenciesExpense = (expense) => async (dispatch) => {
   const response = await fetchCurrenciesApi();
   dispatch(sendExpenses(expense, response));
 };
+
+export const deleteExpense = (expenseId) => ({
+  type: DELETE_EXPENSE,
+  payload: Number(expenseId),
+});

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getCurrenciesExpense, getCurrenciesIds } from '../actions';
+import { deleteExpense, getCurrenciesExpense, getCurrenciesIds } from '../actions';
 
 class Wallet extends React.Component {
   state = {
@@ -35,6 +35,11 @@ class Wallet extends React.Component {
     return expenses.map((expense) => (
       expense.exchangeRates[expense.currency].ask * expense.value))
       .reduce((acc, current) => acc + current, 0);
+  }
+
+  handleDeleteBtn = ({ target: { name } }) => {
+    const { dispatch } = this.props;
+    dispatch(deleteExpense(name));
   }
 
   render() {
@@ -127,6 +132,23 @@ class Wallet extends React.Component {
                   }
                 </td>
                 <td>Real</td>
+                <td>
+                  <button
+                    type="button"
+                    name={ expense.id }
+                    data-testid="edit-btn"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    name={ expense.id }
+                    data-testid="delete-btn"
+                    onClick={ this.handleDeleteBtn }
+                  >
+                    X
+                  </button>
+                </td>
               </tr>
             ))
           }
