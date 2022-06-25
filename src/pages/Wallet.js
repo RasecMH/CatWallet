@@ -1,16 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deleteExpense, getCurrenciesExpense, getCurrenciesIds } from '../actions';
+import {
+  deleteExpense,
+  editExpense,
+  getCurrenciesExpense,
+  getCurrenciesIds,
+  sendEditedExpenses } from '../actions';
 
 class Wallet extends React.Component {
   state = {
+    id: 0,
     value: '',
     description: '',
     currency: 'USD',
     method: 'Dinheiro',
     tag: 'Alimentação',
-
+    exchangeRates: {},
   }
 
   componentDidMount() {
@@ -25,7 +31,7 @@ class Wallet extends React.Component {
 
   handleClick = () => {
     const { dispatch, wallet: { expenses } } = this.props;
-    const stateWithId = { id: expenses.length, ...this.state };
+    const stateWithId = { ...this.state, id: expenses.length };
     dispatch(getCurrenciesExpense(stateWithId));
     this.setState({ value: '' });
   }
@@ -42,8 +48,31 @@ class Wallet extends React.Component {
     dispatch(deleteExpense(name));
   }
 
+  handleEditBtn = ({ target: { name } }) => {
+    const { dispatch } = this.props;
+    dispatch(editExpense(name));
+    const { wallet: { expenses } } = this.props;
+    this.setState({
+      id: expenses[name].id,
+      value: expenses[name].value,
+      description: expenses[name].description,
+      currency: expenses[name].currency,
+      method: expenses[name].method,
+      tag: expenses[name].tag,
+      exchangeRates: expenses[name].exchangeRates,
+    });
+  }
+
+  handleEditExpanseBtn = () => {
+    const { dispatch, wallet: { expenses, idToEdit } } = this.props;
+    const newExpenses = [...expenses];
+    newExpenses.splice(idToEdit, 1, this.state);
+    dispatch(sendEditedExpenses(newExpenses));
+    this.setState({ value: '', description: '' });
+  }
+
   render() {
-    const { user: { email }, wallet: { currencies, expenses } } = this.props;
+    const { user: { email }, wallet: { currencies, expenses, editor } } = this.props;
     const { value, description, currency, method, tag } = this.state;
     return (
       <div>
@@ -102,7 +131,26 @@ class Wallet extends React.Component {
             <option>Transporte</option>
             <option>Saúde</option>
           </select>
-          <button type="button" onClick={ this.handleClick }>Adicionar despesa</button>
+          {
+            editor
+              ? (
+                <button
+                  type="button"
+                  onClick={ this.handleEditExpanseBtn }
+                >
+                  Editar despesa
+
+                </button>
+              )
+              : (
+                <button
+                  type="button"
+                  onClick={ this.handleClick }
+                >
+                  Adicionar despesa
+                </button>
+              )
+          }
         </main>
         <table>
           <tr>
@@ -137,6 +185,7 @@ class Wallet extends React.Component {
                     type="button"
                     name={ expense.id }
                     data-testid="edit-btn"
+                    onClick={ this.handleEditBtn }
                   >
                     Edit
                   </button>

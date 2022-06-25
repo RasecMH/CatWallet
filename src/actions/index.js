@@ -6,6 +6,8 @@ export const SEND_WALLET_DATA = 'SEND_WALLET_DATA';
 export const SEND_CURRENCIES_IDS = 'SEND_CURRENCIES_IDS';
 export const SEND_EXPENSE = 'SEND_EXPENSE';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
+export const EDIT_EXPENSE = 'EDIT_EXPENSE';
+export const EDITED_EXPENSES = 'EDITED_EXPENSES';
 
 export const sendLoginData = (loginData) => ({
   type: SEND_LOGIN_DATA,
@@ -41,4 +43,14 @@ export const getCurrenciesExpense = (expense) => async (dispatch) => {
 export const deleteExpense = (expenseId) => ({
   type: DELETE_EXPENSE,
   payload: Number(expenseId),
+});
+
+export const editExpense = (expenseId) => ({
+  type: EDIT_EXPENSE,
+  payload: Number(expenseId),
+});
+
+export const sendEditedExpenses = (expenses) => ({
+  type: EDITED_EXPENSES,
+  payload: expenses,
 });
