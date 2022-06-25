@@ -4,6 +4,7 @@ import fetchCurrenciesApi from '../helpers';
 export const SEND_LOGIN_DATA = 'SEND_LOGIN_DATA';
 export const SEND_WALLET_DATA = 'SEND_WALLET_DATA';
 export const SEND_CURRENCIES_IDS = 'SEND_CURRENCIES_IDS';
+export const SEND_EXPENSE = 'SEND_EXPENSE';
 
 export const sendLoginData = (loginData) => ({
   type: SEND_LOGIN_DATA,
@@ -24,4 +25,14 @@ export const getCurrenciesIds = () => async (dispatch) => {
   const response = await fetchCurrenciesApi();
   const currenciesIds = Object.keys(response);
   dispatch(sendCurrenciesIds(currenciesIds));
+};
+
+export const sendExpenses = (expense, currencies) => ({
+  type: SEND_EXPENSE,
+  payload: { ...expense, exchangeRates: { ...currencies } },
+});
+
+export const getCurrenciesExpense = (expense) => async (dispatch) => {
+  const response = await fetchCurrenciesApi();
+  dispatch(sendExpenses(expense, response));
 };
