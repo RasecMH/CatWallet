@@ -38,7 +38,7 @@ class Wallet extends React.Component {
   }
 
   render() {
-    const { user: { email }, wallet: { currencies } } = this.props;
+    const { user: { email }, wallet: { currencies, expenses } } = this.props;
     const { value, description, currency, method, tag } = this.state;
     return (
       <div>
@@ -111,6 +111,25 @@ class Wallet extends React.Component {
             <th>Moeda de conversão</th>
             <th>Editar/Excluir</th>
           </tr>
+          {
+            expenses.map((expense) => (
+              <tr key={ expense.id }>
+                <td>{expense.description}</td>
+                <td>{expense.tag}</td>
+                <td>{expense.method}</td>
+                <td>{Number(expense.value).toFixed(2)}</td>
+                <td>{expense.exchangeRates[expense.currency].name}</td>
+                <td>{Number(expense.exchangeRates[expense.currency].ask).toFixed(2)}</td>
+                <td>
+                  {
+                    (expense.exchangeRates[expense.currency].ask * expense.value)
+                      .toFixed(2)
+                  }
+                </td>
+                <td>Real</td>
+              </tr>
+            ))
+          }
         </table>
       </div>
     );
